@@ -3,10 +3,14 @@
 # http://behat.org/en/latest/quick_start.html
 
 Feature:
-    In order to prove that the Behat Symfony extension is correctly installed
+    In order to manage product
     As a user
-    I want to have a demo scenario
+    I need to be able to add/edit/delete products
 
-    Scenario: It receives a response from Symfony's kernel
-        When a demo scenario sends a request to "/"
-        Then the response should be received
+    Scenario: Add a new product
+        Given I am on "/product/new"
+        And I fill in "Name" with "product1"
+        And I fill in "Price" with "20"
+        And I press "Save"
+#        Then I should see "Product created FTW!"
+#        And I should see "Veloci-chew toy"
