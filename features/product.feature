@@ -12,5 +12,8 @@ Feature:
         And I fill in "Name" with "product1"
         And I fill in "Price" with "20"
         And I press "Save"
-#        Then I should see "Product created FTW!"
-#        And I should see "Veloci-chew toy"
+
+    Scenario: List available products
+        And I am on "/"
+        When I click "Products"
+        Then I should see 13 products

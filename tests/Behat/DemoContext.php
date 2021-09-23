@@ -5,10 +5,16 @@ declare(strict_types=1);
 namespace App\Tests\Behat;
 
 use Behat\Behat\Context\Context;
+use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\MinkExtension\Context\RawMinkContext;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
+use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertNotNull;
+
+require_once __DIR__.'/../../vendor/phpunit/phpunit/src/Framework/Assert/Functions.php';
 
 /**
  * This context class contains the definitions of the steps used by the demo
@@ -16,7 +22,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
  *
  * @see http://behat.org/en/latest/quick_start.html
  */
-final class DemoContext implements Context
+final class DemoContext extends RawMinkContext implements Context, SnippetAcceptingContext
 {
     /** @var KernelInterface */
     private $kernel;
@@ -44,4 +50,32 @@ final class DemoContext implements Context
     {
         Assert::assertNotNull($this->response);
     }
+
+    /**
+     * @return \Behat\Mink\Element\DocumentElement
+     */
+    private function getPage()
+    {
+        return $this->getSession()->getPage();
+    }
+
+    /**
+     * @When I click :linkName
+     */
+    public function iClick($linkName)
+    {
+        $this->getPage()->clickLink($linkName);
+    }
+
+    /**
+     * @Then I should see :count products
+     */
+    public function iShouldSeeProducts($count)
+    {
+        $table = $this->getPage()->find('css', 'table.table');
+        assertNotNull($table, 'Cannot find a table!');
+
+        assertCount(intval($count), $table->findAll('css', 'tbody tr'));
+    }
+
 }

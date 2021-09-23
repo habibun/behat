@@ -3,7 +3,13 @@ default:
         default:
             contexts:
                 - App\Tests\Behat\DemoContext
+                - Behat\MinkExtension\Context\MinkContext
 
     extensions:
         FriendsOfBehat\SymfonyExtension:
             bootstrap: tests/bootstrap.php
+        Behat\MinkExtension:
+            base_url: "http://localhost:8000"
+            sessions:
+                default:
+                    symfony: ~
